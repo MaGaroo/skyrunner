@@ -1,13 +1,10 @@
-import asyncio
-import sys
-from asgiref.sync import sync_to_async
-
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404, HttpResponse
 from django.conf import settings
+from django.utils import timezone
 
 from .skyroom import Skyroom
-from .models import NightName
+from .models import NightName, Room
 
 
 def hello_world_view(request):
@@ -15,21 +12,21 @@ def hello_world_view(request):
 
 
 def class_members_view(request, name):
-    if name not in settings.ROOMS:
-        raise Http404('Class not found')
-    room_id = settings.ROOMS[name]
+    vc = get_object_or_404(Room, name=name)
     room = Skyroom(
-        settings.SKYROOM_URI,
-        room_id,
-        settings.SKYROOM_USERNAME,
-        settings.SKYROOM_PASSWORD,
-        settings.SKYROOM_SURNAME,
+        vc.uri or settings.SKYROOM_URI,
+        vc.code,
+        vc.username,
+        vc.password,
+        vc.surname,
     )
     if request.method == 'POST':
-        get_object_or_404(
+        nn = get_object_or_404(
             NightName,
             name=request.POST.get('night'),
         )
+        if timezone.now() < nn.start or timezone.now() > nn.end:
+            raise Http404()
         users = room.users_list()
         room.promote(int(request.POST.get('uid')))
     else:
