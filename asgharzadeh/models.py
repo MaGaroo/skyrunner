@@ -16,7 +16,7 @@ class Room(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
-    uid = models.CharField(max_length=200, blank=True)
+    uri = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return f'Room<{self.name}>'
