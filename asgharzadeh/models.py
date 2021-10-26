@@ -1,10 +1,11 @@
 from django.db import models
+from django.utils import timezone
 
 
 class NightName(models.Model):
     name = models.CharField(max_length=100)
-    start = models.DateTimeField(auto_now=True)
-    end = models.DateTimeField(auto_now=True)
+    start = models.DateTimeField(default=timezone.now())
+    end = models.DateTimeField(default=timezone.now())
 
     def __str__(self):
         return f'NightName<{self.id}:"{self.name}">'
