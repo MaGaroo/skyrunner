@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>
+            بالابر تمام اتوماتیک
+        </title>
+    </head>
+    <body>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="user-select">User:</label>
+            <select id="user-select" name="uid">
+                {% for user in users %}
+                    <option value="{{ user.pk }}">
+                        {{ user.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <br />
+            <br />
+            <label for="night">Night Name:</label>
+            <input id="night" type="text" name="night" />
+            <br />
+            <br />
+            <input type="submit" value="Submit" />
+        </form>
+    </body>
+</html>
